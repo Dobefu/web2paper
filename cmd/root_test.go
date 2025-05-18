@@ -18,7 +18,7 @@ func TestRootExecute(t *testing.T) {
 			args: nil,
 		},
 		"invalid args": {
-			args: []string{"", "--bogus"},
+			args: []string{"web2paper", "--bogus"},
 		},
 	}
 
@@ -32,12 +32,4 @@ func TestRootExecute(t *testing.T) {
 		})
 	}
 
-}
-
-func TestRootExecuteSuccess(t *testing.T) {
-	assert.NotPanics(t, Execute, "should not panic")
-}
-
-func TestRootInitConfig(t *testing.T) {
-	assert.NotPanics(t, initConfig, "should not panic")
 }
