@@ -1,0 +1,6 @@
+# Compiled binaries.
+app
+web2paper
+
+# Temporary files.
+tmp/
