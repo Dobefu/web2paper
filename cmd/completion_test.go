@@ -8,7 +8,7 @@ import (
 )
 
 func TestRunCompletionCmd(t *testing.T) {
-	var tests = map[string]struct {
+	tests := map[string]struct {
 		shell       string
 		isSupported bool
 	}{
@@ -36,7 +36,15 @@ func TestRunCompletionCmd(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			err := runCompletionCmd(completionCmd, []string{test.shell})
+			t.Parallel()
+
+			cmd, err := NewCompletionCmd()
+			assert.NoError(t, err)
+
+			cmd.ValidArgs = nil
+			cmd.SetArgs([]string{test.shell})
+
+			err = cmd.Execute()
 
 			if test.isSupported {
 				assert.NoError(t, err)

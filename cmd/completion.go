@@ -7,10 +7,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var completionCmd = &cobra.Command{
-	Use:   "completion [bash|zsh|fish|powershell]",
-	Short: "Generate completion script",
-	Long: `To load completions:
+func NewCompletionCmd() (cmd *cobra.Command, err error) {
+	cmd = &cobra.Command{
+		Use:   "completion [bash|zsh|fish|powershell]",
+		Short: "Generate a shell completion script",
+		Long: `To load completions:
 
 Bash:
   $ source <(./app completion bash)
@@ -43,17 +44,16 @@ Fish:
 
   # You will need to start a new shell for this setup to take effect.
 `,
-	DisableFlagsInUseLine: true,
-	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
-	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
-	Annotations: map[string]string{
-		"commandType": "main",
-	},
-	RunE: runCompletionCmd,
-}
+		DisableFlagsInUseLine: true,
+		ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
+		Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+		Annotations: map[string]string{
+			"commandType": "main",
+		},
+		RunE: runCompletionCmd,
+	}
 
-func init() {
-	rootCmd.AddCommand(completionCmd)
+	return cmd, nil
 }
 
 func runCompletionCmd(cmd *cobra.Command, args []string) error {
