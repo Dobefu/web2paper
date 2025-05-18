@@ -8,6 +8,8 @@ import (
 )
 
 func TestRunCompletionCmd(t *testing.T) {
+	t.Parallel()
+
 	tests := map[string]struct {
 		shell       string
 		isSupported bool

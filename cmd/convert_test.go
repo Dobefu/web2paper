@@ -8,6 +8,8 @@ import (
 )
 
 func TestRunConvertCmd(t *testing.T) {
+	t.Parallel()
+
 	tests := map[string]struct {
 		args                  []string
 		shouldCreateConverter bool

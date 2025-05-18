@@ -8,6 +8,8 @@ import (
 )
 
 func TestRootExecute(t *testing.T) {
+	t.Parallel()
+
 	oldOsArgs := os.Args
 	defer func() { os.Args = oldOsArgs }()
 

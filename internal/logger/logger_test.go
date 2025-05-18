@@ -10,6 +10,8 @@ import (
 )
 
 func TestLogger(t *testing.T) {
+	t.Parallel()
+
 	var tests = map[string]struct {
 		method      string
 		logLevel    LogLevel
