@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: ['*']
+    tags: ['v*']
+  pull_request:
+    branches: ['*']
+
+permissions:
+  contents: write
+
+jobs:
+  build-test:
+    name: 'Build and Test'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+          cache: true
+          cache-dependency-path: |
+            **/go.sum
+            **/go.mod
+
+      - name: Install Go dependencies
+        run: go get .
+
+      - name: Build the application
+        run: go build
+
+      - name: Create a test results directory
+        run: mkdir test-results
+
+      - name: Run tests
+        run: |
+          go test "./..." -coverprofile="test-results/coverage.out" -covermode=count -parallel=$(nproc)
+          go test "./..." -coverprofile="coverage.out" -covermode=count -json > test-report.out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+
+  sonar-scan:
+    name: 'SonarQube Scan'
+    needs: [build-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
