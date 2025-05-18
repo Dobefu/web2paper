@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/Dobefu/web2paper/internal/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -26,5 +28,10 @@ func initConfig() {
 }
 
 func Execute() {
-	_ = rootCmd.Execute()
+	log := logger.New(logger.LogLevel(viper.GetInt("log.level")), os.Stdout)
+	err := rootCmd.Execute()
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
