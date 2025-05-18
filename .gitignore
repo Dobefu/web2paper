@@ -2,5 +2,9 @@
 app
 web2paper
 
+# Test coverage files.
+coverage.*
+cover.cov
+
 # Temporary files.
 tmp/
