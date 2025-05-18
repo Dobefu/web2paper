@@ -32,6 +32,6 @@ func Execute() {
 	err := rootCmd.Execute()
 
 	if err != nil {
-		log.Fatal(err.Error())
+		_, _ = log.Error(err.Error())
 	}
 }
