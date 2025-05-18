@@ -55,6 +55,11 @@ Fish:
 
 	return cmd, nil
 }
+func init() {
+	cmd, _ := NewCompletionCmd()
+
+	rootCmd.AddCommand(cmd)
+}
 
 func runCompletionCmd(cmd *cobra.Command, args []string) error {
 	switch args[0] {

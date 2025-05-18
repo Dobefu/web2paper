@@ -1,56 +1,57 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-
-	"github.com/Dobefu/web2paper/internal/logger"
+	"github.com/Dobefu/web2paper/internal/converter"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
-var convertCmd = &cobra.Command{
-	Use:   "convert",
-	Short: "Convert an HTML document to PDF",
-	Run:   runConvertCmd,
+func NewConvertCmd() (cmd *cobra.Command, err error) {
+	cmd = &cobra.Command{
+		Use:   "convert",
+		Short: "Convert an HTML document to PDF",
+		RunE:  runConvertCmd,
+	}
+
+	cmd.Flags().StringP("input", "i", "", "The file to process")
+	cmd.Flags().StringP("output", "o", "", "The file to write")
+
+	err = cmd.MarkFlagRequired("input")
+
+	if err != nil {
+		return cmd, err
+	}
+
+	err = cmd.MarkFlagRequired("output")
+
+	if err != nil {
+		return cmd, err
+	}
+
+	return cmd, nil
 }
 
 func init() {
-	rootCmd.AddCommand(convertCmd)
+	cmd, _ := NewConvertCmd()
 
-	log := logger.New(logger.LogLevel(viper.GetInt("log.level")), os.Stdout)
-
-	convertCmd.Flags().StringP("input", "i", "", "The file to process")
-	convertCmd.Flags().StringP("output", "o", "", "The file to write")
-
-	err := convertCmd.MarkFlagRequired("input")
-
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	err = convertCmd.MarkFlagRequired("output")
-
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	rootCmd.AddCommand(cmd)
 }
 
-func runConvertCmd(cmd *cobra.Command, args []string) {
-	log := logger.New(logger.LogLevel(viper.GetInt("log.level")), os.Stdout)
+var converterNew = converter.New
 
+func runConvertCmd(cmd *cobra.Command, args []string) (err error) {
 	input, err := cmd.Flags().GetString("input")
 
 	if err != nil {
-		log.Fatal(err.Error())
+		return err
 	}
 
 	output, err := cmd.Flags().GetString("output")
 
 	if err != nil {
-		log.Fatal(err.Error())
+		return err
 	}
 
-	fmt.Println(input)
-	fmt.Println(output)
+	converterNew(input, output)
+
+	return nil
 }
