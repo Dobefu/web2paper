@@ -38,13 +38,12 @@ func TestRunCompletionCmd(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			cmd, err := NewCompletionCmd()
-			assert.NoError(t, err)
+			cmd := NewCompletionCmd()
 
 			cmd.ValidArgs = nil
 			cmd.SetArgs([]string{test.shell})
 
-			err = cmd.Execute()
+			err := cmd.Execute()
 
 			if test.isSupported {
 				assert.NoError(t, err)

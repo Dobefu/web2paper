@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewConvertCmd() (cmd *cobra.Command, err error) {
+func NewConvertCmd() (cmd *cobra.Command) {
 	cmd = &cobra.Command{
 		Use:   "convert",
 		Short: "Convert an HTML document to PDF",
@@ -15,41 +15,23 @@ func NewConvertCmd() (cmd *cobra.Command, err error) {
 	cmd.Flags().StringP("input", "i", "", "The file to process")
 	cmd.Flags().StringP("output", "o", "", "The file to write")
 
-	err = cmd.MarkFlagRequired("input")
+	_ = cmd.MarkFlagRequired("input")
+	_ = cmd.MarkFlagRequired("output")
 
-	if err != nil {
-		return cmd, err
-	}
-
-	err = cmd.MarkFlagRequired("output")
-
-	if err != nil {
-		return cmd, err
-	}
-
-	return cmd, nil
+	return cmd
 }
 
 func init() {
-	cmd, _ := NewConvertCmd()
-
-	rootCmd.AddCommand(cmd)
+	rootCmd.AddCommand(NewConvertCmd())
 }
 
 var converterNew = converter.New
 
 func runConvertCmd(cmd *cobra.Command, args []string) (err error) {
-	input, err := cmd.Flags().GetString("input")
-
-	if err != nil {
-		return err
-	}
-
-	output, err := cmd.Flags().GetString("output")
-
-	if err != nil {
-		return err
-	}
+	// Error checking is not needed here.
+	// Cobra ensures that this code will not be reached if these are missing.
+	input, _ := cmd.Flags().GetString("input")
+	output, _ := cmd.Flags().GetString("output")
 
 	converterNew(input, output)
 

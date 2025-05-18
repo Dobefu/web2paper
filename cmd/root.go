@@ -9,12 +9,12 @@ import (
 )
 
 var (
-	rootCmd, _ = NewRootCmd()
+	rootCmd = NewRootCmd()
 
 	logLevel int
 )
 
-func NewRootCmd() (cmd *cobra.Command, err error) {
+func NewRootCmd() (cmd *cobra.Command) {
 	cmd = &cobra.Command{
 		Use:   "web2paper",
 		Short: "Quickly and easily convert an HTML document to PDF",
@@ -23,7 +23,7 @@ func NewRootCmd() (cmd *cobra.Command, err error) {
 	viper.Set("log.level", logLevel)
 	cmd.PersistentFlags().IntVarP(&logLevel, "loglevel", "l", logger.LogLevelInfo, "The log level to use. 0=TRACE, 1=DEBUG, 2=INFO, 3=WARN, 4=ERROR, 5=FATAL")
 
-	return cmd, nil
+	return cmd
 }
 
 func Execute() {

@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewCompletionCmd() (cmd *cobra.Command, err error) {
+func NewCompletionCmd() (cmd *cobra.Command) {
 	cmd = &cobra.Command{
 		Use:   "completion [bash|zsh|fish|powershell]",
 		Short: "Generate a shell completion script",
@@ -53,12 +53,11 @@ Fish:
 		RunE: runCompletionCmd,
 	}
 
-	return cmd, nil
+	return cmd
 }
-func init() {
-	cmd, _ := NewCompletionCmd()
 
-	rootCmd.AddCommand(cmd)
+func init() {
+	rootCmd.AddCommand(NewCompletionCmd())
 }
 
 func runCompletionCmd(cmd *cobra.Command, args []string) error {
