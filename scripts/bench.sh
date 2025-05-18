@@ -7,4 +7,4 @@ set -e
 cd "$(dirname "$0")/.."
 
 # Run the benchmarks.
-go test -bench=. ./... -benchmem -run notest -cpu 4 -count 4
+go test -bench=. "./..." "$@" -benchmem -run notest -cpu 4 -count 4
