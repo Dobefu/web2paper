@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/Dobefu/web2paper/internal/converter"
 	"github.com/spf13/cobra"
 )
@@ -41,7 +39,11 @@ func runConvertCmd(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Println(pdfConverter)
+	err = pdfConverter.Convert()
+
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

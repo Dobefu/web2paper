@@ -5,7 +5,7 @@ import (
 )
 
 type Converter interface {
-	Convert()
+	Convert() (err error)
 }
 
 type converter struct {
@@ -27,6 +27,6 @@ func New(input string, output string) (Converter, error) {
 	}, nil
 }
 
-func (c *converter) Convert() {
-	// Placeholder.
+func (c *converter) Convert() (err error) {
+	return nil
 }

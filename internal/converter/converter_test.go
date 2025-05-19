@@ -1,13 +1,12 @@
 package converter
 
 import (
-	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestConverter(t *testing.T) {
+func TestConverterNew(t *testing.T) {
 	t.Parallel()
 
 	tests := map[string]struct {
@@ -30,7 +29,7 @@ func TestConverter(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			t.Log(runtime.Caller(0))
+
 			_, err := New(test.input, test.output)
 
 			if test.shouldSucceed {
