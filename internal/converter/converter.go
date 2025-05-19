@@ -1,8 +1,32 @@
 package converter
 
-import "fmt"
+import (
+	"os"
+)
 
-func New(input string, output string) {
-	fmt.Println(input)
-	fmt.Println(output)
+type Converter interface {
+	Convert()
+}
+
+type converter struct {
+	Converter
+	data       []byte
+	outputPath string
+}
+
+func New(input string, output string) (Converter, error) {
+	data, err := os.ReadFile(input)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &converter{
+		data:       data,
+		outputPath: output,
+	}, nil
+}
+
+func (c *converter) Convert() {
+	// Placeholder.
 }
