@@ -8,3 +8,6 @@ cover.cov
 
 # Temporary files.
 tmp/
+
+# Annoying MacOS files.
+.DS_Store
