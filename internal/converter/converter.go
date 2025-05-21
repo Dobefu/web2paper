@@ -10,8 +10,14 @@ var (
 	version = "2.0"
 )
 
+type Obj struct {
+	buf    bytes.Buffer
+	offset int
+}
+
 type Converter interface {
 	AddObj(data ...string)
+	AddXrefTable()
 	Convert() (err error)
 }
 
@@ -21,7 +27,7 @@ type converter struct {
 	outputData bytes.Buffer
 	outputPath string
 
-	objCount uint
+	objs []Obj
 }
 
 func New(input string, output string) (c Converter, err error) {
@@ -36,7 +42,7 @@ func New(input string, output string) (c Converter, err error) {
 		outputData: bytes.Buffer{},
 		outputPath: output,
 
-		objCount: 0,
+		objs: []Obj{},
 	}
 
 	conv.outputData.WriteString(fmt.Sprintf("%%PDF-%s\n", version))
@@ -45,30 +51,42 @@ func New(input string, output string) (c Converter, err error) {
 }
 
 func (c *converter) AddObj(data ...string) {
-	c.objCount += 1
+	obj := bytes.Buffer{}
 
-	c.outputData.WriteString(fmt.Sprintf("%d 0 obj", c.objCount))
-	c.outputData.WriteString("<<")
-	c.outputData.WriteString("/Type")
+	obj.WriteString(fmt.Sprintf("%d 0 obj", (len(c.objs) + 1)))
+	obj.WriteString("<<")
+	obj.WriteString("/Type")
 
 	for _, item := range data {
-		c.outputData.WriteString(item)
+		obj.WriteString(item)
 	}
 
-	c.outputData.WriteString(">>")
-	c.outputData.WriteString("endobj\n")
+	obj.WriteString(">>")
+	obj.WriteString("endobj\n")
+
+	c.objs = append(c.objs, Obj{
+		buf:    obj,
+		offset: len(c.outputData.Bytes()),
+	})
+
+	c.outputData.Write(obj.Bytes())
+}
+
+func (c *converter) AddXrefTable() {
+	c.outputData.WriteString("xref\n")
+	c.outputData.WriteString("0 4\n")
+	c.outputData.WriteString("0000000000 65535 f \n")
+
+	for _, obj := range c.objs {
+		c.outputData.WriteString(fmt.Sprintf("%010d 00000 n \n", obj.offset))
+	}
 }
 
 func (c *converter) Convert() (err error) {
 	c.AddObj("/Catalog", "/Pages 2 0 R")
 	c.AddObj("/Pages", "/Kids[3 0 R]", "/Count 1")
 	c.AddObj("/Page", "/Parent 2 0 R", "/Resources<<>>", "/MediaBox[0 0 612 792]")
-	c.outputData.WriteString("xref\n")
-	c.outputData.WriteString("0 4\n")
-	c.outputData.WriteString("0000000000 65535 f \n")
-	c.outputData.WriteString("0000000009 00000 n \n")
-	c.outputData.WriteString("0000000052 00000 n \n")
-	c.outputData.WriteString("0000000101 00000 n \n")
+	c.AddXrefTable()
 	c.outputData.WriteString("trailer")
 	c.outputData.WriteString("<</Root 1 0 R")
 	c.outputData.WriteString("/Size 4")
