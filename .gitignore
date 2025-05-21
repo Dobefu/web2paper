@@ -11,3 +11,7 @@ tmp/
 
 # Annoying MacOS files.
 .DS_Store
+
+# Generated PDFs in testdata directories.
+**/testdata/*.pdf
+**/testdata/**/*.pdf

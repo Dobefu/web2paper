@@ -16,7 +16,7 @@ func TestConverterNew(t *testing.T) {
 	}{
 		"success": {
 			input:         "testdata/001_empty_page/index.html",
-			output:        "out.pdf",
+			output:        "testdata/001_empty_page/converter_new_success.pdf",
 			shouldSucceed: true,
 		},
 		"nonexistent file": {
@@ -51,7 +51,7 @@ func TestConverterConvert(t *testing.T) {
 	}{
 		"success": {
 			input:         "testdata/001_empty_page/index.html",
-			output:        "out.pdf",
+			output:        "testdata/001_empty_page/converter_convert_success.pdf",
 			shouldSucceed: true,
 		},
 	}
