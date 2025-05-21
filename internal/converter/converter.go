@@ -2,10 +2,16 @@ package converter
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 )
 
+var (
+	version = "2.0"
+)
+
 type Converter interface {
+	AddObj(data ...string)
 	Convert() (err error)
 }
 
@@ -14,42 +20,49 @@ type converter struct {
 	inputData  []byte
 	outputData bytes.Buffer
 	outputPath string
+
+	objCount uint
 }
 
-func New(input string, output string) (Converter, error) {
+func New(input string, output string) (c Converter, err error) {
 	data, err := os.ReadFile(input)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &converter{
+	conv := &converter{
 		inputData:  data,
 		outputData: bytes.Buffer{},
 		outputPath: output,
-	}, nil
+
+		objCount: 0,
+	}
+
+	conv.outputData.WriteString(fmt.Sprintf("%%PDF-%s\n", version))
+
+	return conv, nil
+}
+
+func (c *converter) AddObj(data ...string) {
+	c.objCount += 1
+
+	c.outputData.WriteString(fmt.Sprintf("%d 0 obj", c.objCount))
+	c.outputData.WriteString("<<")
+	c.outputData.WriteString("/Type")
+
+	for _, item := range data {
+		c.outputData.WriteString(item)
+	}
+
+	c.outputData.WriteString(">>")
+	c.outputData.WriteString("endobj\n")
 }
 
 func (c *converter) Convert() (err error) {
-	c.outputData.WriteString("%PDF-2.0\n")
-	c.outputData.WriteString("1 0 obj")
-	c.outputData.WriteString("<</Type/Catalog")
-	c.outputData.WriteString("/Pages 2 0 R")
-	c.outputData.WriteString(">>")
-	c.outputData.WriteString("endobj\n")
-	c.outputData.WriteString("2 0 obj")
-	c.outputData.WriteString("<</Type/Pages")
-	c.outputData.WriteString("/Kids[3 0 R]")
-	c.outputData.WriteString("/Count 1")
-	c.outputData.WriteString(">>")
-	c.outputData.WriteString("endobj\n")
-	c.outputData.WriteString("3 0 obj")
-	c.outputData.WriteString("<</Type/Page")
-	c.outputData.WriteString("/Parent 2 0 R")
-	c.outputData.WriteString("/Resources<<>>")
-	c.outputData.WriteString("/MediaBox[0 0 612 792]")
-	c.outputData.WriteString(">>")
-	c.outputData.WriteString("endobj\n")
+	c.AddObj("/Catalog", "/Pages 2 0 R")
+	c.AddObj("/Pages", "/Kids[3 0 R]", "/Count 1")
+	c.AddObj("/Page", "/Parent 2 0 R", "/Resources<<>>", "/MediaBox[0 0 612 792]")
 	c.outputData.WriteString("xref\n")
 	c.outputData.WriteString("0 4\n")
 	c.outputData.WriteString("0000000000 65535 f \n")
