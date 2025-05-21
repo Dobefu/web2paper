@@ -30,7 +30,7 @@ func TestConverterNew(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			_, err := New(test.input, test.output)
+			_, err := New(PdfSize(PdfSizeA4), test.input, test.output)
 
 			if test.shouldSucceed {
 				assert.NoError(t, err)
@@ -65,7 +65,7 @@ func TestConverterConvert(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			pdfConverter, err := New(test.input, test.output)
+			pdfConverter, err := New(PdfSize(PdfSizeA4), test.input, test.output)
 			assert.NoError(t, err)
 
 			err = pdfConverter.Convert()

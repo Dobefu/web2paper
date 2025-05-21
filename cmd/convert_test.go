@@ -60,7 +60,7 @@ func TestRunConvertCmd(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 
-			converterNew = func(_ string, _ string) (converter.Converter, error) {
+			converterNew = func(_ converter.PdfSize, _ string, _ string) (converter.Converter, error) {
 				return &mockConverter{convertErr: test.converterConvertErr}, test.converterNewErr
 			}
 
