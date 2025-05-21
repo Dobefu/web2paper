@@ -19,11 +19,11 @@ type Obj struct {
 }
 
 type Converter interface {
-	AddObj(data ...string)
-	AddXrefTable()
-	AddTrailer()
-	AddXrefOffset()
-	AddEOF()
+	addObj(data ...string)
+	addXrefTable()
+	addTrailer()
+	addXrefOffset()
+	addEOF()
 	Convert() (err error)
 }
 
@@ -60,7 +60,7 @@ func New(input string, output string) (c Converter, err error) {
 	return conv, nil
 }
 
-func (c *converter) AddObj(data ...string) {
+func (c *converter) addObj(data ...string) {
 	obj := bytes.Buffer{}
 
 	obj.WriteString(fmt.Sprintf("%d 0 obj", (len(c.objs) + 1)))
@@ -82,7 +82,7 @@ func (c *converter) AddObj(data ...string) {
 	c.outputData.Write(obj.Bytes())
 }
 
-func (c *converter) AddXrefTable() {
+func (c *converter) addXrefTable() {
 	c.xrefOffset = c.outputData.Len()
 
 	c.outputData.WriteString("xref\n")
@@ -94,7 +94,7 @@ func (c *converter) AddXrefTable() {
 	}
 }
 
-func (c *converter) AddTrailer() {
+func (c *converter) addTrailer() {
 	c.idHasher.Write(c.outputData.Bytes())
 	pdfId := fmt.Sprintf("%x", c.idHasher.Sum(nil))[:16]
 
@@ -109,23 +109,24 @@ func (c *converter) AddTrailer() {
 	c.outputData.WriteString(">>\n")
 }
 
-func (c *converter) AddXrefOffset() {
+func (c *converter) addXrefOffset() {
 	c.outputData.WriteString("startxref\n")
 	c.outputData.WriteString(fmt.Sprintf("%d\n", c.xrefOffset))
 }
 
-func (c *converter) AddEOF() {
+func (c *converter) addEOF() {
 	c.outputData.WriteString("%%EOF\n")
 }
 
 func (c *converter) Convert() (err error) {
-	c.AddObj("/Catalog", "/Pages 2 0 R")
-	c.AddObj("/Pages", "/Kids[3 0 R]", "/Count 1")
-	c.AddObj("/Page", "/Parent 2 0 R", "/Resources<<>>", "/MediaBox[0 0 612 792]")
-	c.AddXrefTable()
-	c.AddTrailer()
-	c.AddXrefOffset()
-	c.AddEOF()
+	c.addObj("/Catalog", "/Pages 2 0 R")
+	c.addObj("/Pages", "/Kids[3 0 R]", "/Count 1")
+	c.addObj("/Page", "/Parent 2 0 R", "/Resources<<>>", "/MediaBox[0 0 612 792]")
+	c.addXrefTable()
+	c.addTrailer()
+	c.addXrefOffset()
+
+	c.addEOF()
 
 	err = os.WriteFile(c.outputPath, c.outputData.Bytes(), 0644)
 
