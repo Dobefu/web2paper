@@ -2,8 +2,11 @@ package converter
 
 import (
 	"bytes"
+	"crypto/md5"
 	"fmt"
+	"hash"
 	"os"
+	"time"
 )
 
 var (
@@ -18,6 +21,7 @@ type Obj struct {
 type Converter interface {
 	AddObj(data ...string)
 	AddXrefTable()
+	AddTrailer()
 	Convert() (err error)
 }
 
@@ -26,6 +30,7 @@ type converter struct {
 	inputData  []byte
 	outputData bytes.Buffer
 	outputPath string
+	idHasher   hash.Hash
 
 	objs []Obj
 }
@@ -41,6 +46,7 @@ func New(input string, output string) (c Converter, err error) {
 		inputData:  data,
 		outputData: bytes.Buffer{},
 		outputPath: output,
+		idHasher:   md5.New(),
 
 		objs: []Obj{},
 	}
@@ -82,16 +88,27 @@ func (c *converter) AddXrefTable() {
 	}
 }
 
+func (c *converter) AddTrailer() {
+	c.idHasher.Write(c.outputData.Bytes())
+	pdfId := fmt.Sprintf("%x", c.idHasher.Sum(nil))[:16]
+
+	_, _ = fmt.Fprintf(c.idHasher, "%d", time.Now().UnixNano())
+	revisionId := fmt.Sprintf("%x", c.idHasher.Sum(nil))[:16]
+	c.idHasher.Reset()
+
+	c.outputData.WriteString("trailer")
+	c.outputData.WriteString("<</Root 1 0 R")
+	c.outputData.WriteString(fmt.Sprintf("/Size %d", (len(c.objs) + 1)))
+	c.outputData.WriteString(fmt.Sprintf("/ID[(%s)(%s)]", pdfId, revisionId))
+	c.outputData.WriteString(">>\n")
+}
+
 func (c *converter) Convert() (err error) {
 	c.AddObj("/Catalog", "/Pages 2 0 R")
 	c.AddObj("/Pages", "/Kids[3 0 R]", "/Count 1")
 	c.AddObj("/Page", "/Parent 2 0 R", "/Resources<<>>", "/MediaBox[0 0 612 792]")
 	c.AddXrefTable()
-	c.outputData.WriteString("trailer")
-	c.outputData.WriteString("<</Root 1 0 R")
-	c.outputData.WriteString("/Size 4")
-	c.outputData.WriteString("/ID[(1234567890123456)(1234567890123456)]")
-	c.outputData.WriteString(">>\n")
+	c.AddTrailer()
 	c.outputData.WriteString("startxref\n")
 	c.outputData.WriteString("178\n")
 	c.outputData.WriteString("%%EOF\n")
