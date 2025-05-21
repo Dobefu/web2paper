@@ -29,6 +29,9 @@ type Converter interface {
 
 type converter struct {
 	Converter
+
+	size PdfSize
+
 	inputData  []byte
 	outputData bytes.Buffer
 	outputPath string
@@ -38,7 +41,11 @@ type converter struct {
 	xrefOffset int
 }
 
-func New(input string, output string) (c Converter, err error) {
+func New(
+	size PdfSize,
+	input string,
+	output string,
+) (c Converter, err error) {
 	data, err := os.ReadFile(input)
 
 	if err != nil {
@@ -46,6 +53,8 @@ func New(input string, output string) (c Converter, err error) {
 	}
 
 	conv := &converter{
+		size: size,
+
 		inputData:  data,
 		outputData: bytes.Buffer{},
 		outputPath: output,
@@ -121,7 +130,7 @@ func (c *converter) addEOF() {
 func (c *converter) Convert() (err error) {
 	c.addObj("/Catalog", "/Pages 2 0 R")
 	c.addObj("/Pages", "/Kids[3 0 R]", "/Count 1")
-	c.addObj("/Page", "/Parent 2 0 R", "/Resources<<>>", "/MediaBox[0 0 612 792]")
+	c.addObj("/Page", "/Parent 2 0 R", "/Resources<<>>", fmt.Sprintf("/MediaBox[0 0 %.2f %.2f]", c.size.Width, c.size.Height))
 	c.addXrefTable()
 	c.addTrailer()
 	c.addXrefOffset()
