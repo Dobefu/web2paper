@@ -23,6 +23,7 @@ type Converter interface {
 	AddXrefTable()
 	AddTrailer()
 	AddXrefOffset()
+	AddEOF()
 	Convert() (err error)
 }
 
@@ -113,6 +114,10 @@ func (c *converter) AddXrefOffset() {
 	c.outputData.WriteString(fmt.Sprintf("%d\n", c.xrefOffset))
 }
 
+func (c *converter) AddEOF() {
+	c.outputData.WriteString("%%EOF\n")
+}
+
 func (c *converter) Convert() (err error) {
 	c.AddObj("/Catalog", "/Pages 2 0 R")
 	c.AddObj("/Pages", "/Kids[3 0 R]", "/Count 1")
@@ -120,7 +125,7 @@ func (c *converter) Convert() (err error) {
 	c.AddXrefTable()
 	c.AddTrailer()
 	c.AddXrefOffset()
-	c.outputData.WriteString("%%EOF\n")
+	c.AddEOF()
 
 	err = os.WriteFile(c.outputPath, c.outputData.Bytes(), 0644)
 
