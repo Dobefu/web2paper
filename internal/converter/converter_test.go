@@ -54,6 +54,11 @@ func TestConverterConvert(t *testing.T) {
 			output:        "testdata/001_empty_page/converter_convert_success.pdf",
 			shouldSucceed: true,
 		},
+		"invalid location": {
+			input:         "testdata/001_empty_page/index.html",
+			output:        "/bogus",
+			shouldSucceed: false,
+		},
 	}
 
 	for name, test := range tests {
