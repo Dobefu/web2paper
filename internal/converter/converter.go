@@ -18,6 +18,8 @@ type Obj struct {
 }
 
 type Converter interface {
+	AddPage(size PdfSize)
+
 	addObj(data ...string)
 	addXrefTable()
 	addTrailer()
@@ -29,7 +31,7 @@ type Converter interface {
 type converter struct {
 	Converter
 
-	size PdfSize
+	pages []Page
 
 	inputData  []byte
 	outputData bytes.Buffer
@@ -40,11 +42,7 @@ type converter struct {
 	xrefOffset int
 }
 
-func New(
-	size PdfSize,
-	input string,
-	output string,
-) (c Converter, err error) {
+func New(input string, output string) (c Converter, err error) {
 	data, err := os.ReadFile(input)
 
 	if err != nil {
@@ -52,7 +50,7 @@ func New(
 	}
 
 	conv := &converter{
-		size: size,
+		pages: []Page{},
 
 		inputData:  data,
 		outputData: bytes.Buffer{},

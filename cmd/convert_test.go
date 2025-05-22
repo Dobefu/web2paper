@@ -12,6 +12,10 @@ type mockConverter struct {
 	convertErr error
 }
 
+func (c *mockConverter) AddPage(size converter.PdfSize) {
+	// Mock function.
+}
+
 func (c *mockConverter) Convert() (err error) {
 	return c.convertErr
 }
@@ -60,8 +64,10 @@ func TestRunConvertCmd(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 
-			converterNew = func(_ converter.PdfSize, _ string, _ string) (converter.Converter, error) {
-				return &mockConverter{convertErr: test.converterConvertErr}, test.converterNewErr
+			converterNew = func(_ string, _ string) (converter.Converter, error) {
+				return &mockConverter{
+					convertErr: test.converterConvertErr,
+				}, test.converterNewErr
 			}
 
 			defer func() { converterNew = converter.New }()

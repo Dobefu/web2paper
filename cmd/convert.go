@@ -33,12 +33,13 @@ func runConvertCmd(cmd *cobra.Command, args []string) error {
 	input, _ := cmd.Flags().GetString("input")
 	output, _ := cmd.Flags().GetString("output")
 
-	pdfConverter, err := converterNew(converter.PdfSize(converter.PdfSizeA0), input, output)
+	pdfConverter, err := converterNew(input, output)
 
 	if err != nil {
 		return err
 	}
 
+	pdfConverter.AddPage(converter.PdfSize(converter.PdfSizeA0))
 	err = pdfConverter.Convert()
 
 	if err != nil {
