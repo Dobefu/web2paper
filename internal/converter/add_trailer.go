@@ -3,7 +3,6 @@ package converter
 import (
 	"crypto/md5"
 	"fmt"
-	"time"
 )
 
 func (c *converter) addTrailer() {
@@ -12,7 +11,7 @@ func (c *converter) addTrailer() {
 	hasher.Write(c.outputData.Bytes())
 	pdfId := fmt.Sprintf("%x", hasher.Sum(nil))[:16]
 
-	_, _ = fmt.Fprintf(hasher, "%d", time.Now().UnixNano())
+	_, _ = fmt.Fprintf(hasher, "%d", c.creationDate.UnixNano())
 	revisionId := fmt.Sprintf("%x", hasher.Sum(nil))[:16]
 	hasher.Reset()
 

@@ -3,9 +3,12 @@ package converter
 import (
 	"fmt"
 	"os"
+	"time"
 )
 
 func (c *converter) Convert() (err error) {
+	c.creationDate = time.Now()
+
 	c.parseHtml()
 
 	c.outputData.Write([]byte{'%', '\200', '\201', '\202', '\203', '\n'})

@@ -99,8 +99,12 @@ func (c *converter) addMetadata() {
 		metadataXml.Bytes(),
 	)
 
+	date := c.creationDate.Format("20060102150405-07")
+
 	c.addObj([]string{
 		fmt.Sprintf("/Title(%s)", c.title),
 		fmt.Sprintf("/Producer(%s)", producer),
+		fmt.Sprintf("/CreationDate(D:%s'00')", date),
+		fmt.Sprintf("/ModDate(D:%s'00')", date),
 	}, nil)
 }
