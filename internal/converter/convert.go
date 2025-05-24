@@ -6,11 +6,14 @@ import (
 )
 
 func (c *converter) Convert() (err error) {
-	c.addObj("/Catalog", "/Pages 2 0 R")
-	c.addObj("/Pages", "/Kids[3 0 R]", fmt.Sprintf("/Count %d", len(c.pages)))
+	c.parseHtml()
+
+	c.addObj("/Type", "/Catalog", "/Pages 2 0 R")
+	c.addObj("/Type", "/Pages", "/Kids[3 0 R]", fmt.Sprintf("/Count %d", len(c.pages)))
 
 	for _, page := range c.pages {
 		c.addObj(
+			"/Type",
 			"/Page",
 			"/Parent 2 0 R",
 			"/Resources<<>>",

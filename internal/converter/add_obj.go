@@ -10,7 +10,6 @@ func (c *converter) addObj(data ...string) {
 
 	obj.WriteString(fmt.Sprintf("%d 0 obj", (len(c.objs) + 1)))
 	obj.WriteString("<<")
-	obj.WriteString("/Type")
 
 	for _, item := range data {
 		obj.WriteString(item)

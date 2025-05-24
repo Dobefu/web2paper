@@ -17,18 +17,20 @@ type Obj struct {
 
 type Converter interface {
 	AddPage(size PdfSize)
+	Convert() (err error)
 
+	parseHtml() (err error)
 	addObj(data ...string)
 	addXrefTable()
 	addTrailer()
 	addXrefOffset()
 	addEOF()
-	Convert() (err error)
 }
 
 type converter struct {
 	Converter
 
+	title string
 	pages []Page
 
 	inputData  []byte
@@ -47,6 +49,7 @@ func New(input string, output string) (c Converter, err error) {
 	}
 
 	conv := &converter{
+		title: "",
 		pages: []Page{},
 
 		inputData:  data,
