@@ -14,7 +14,7 @@ func TestAddMetadata(t *testing.T) {
 	}{
 		"success": {
 			input:  "testdata/001_empty_page/index.html",
-			output: "testdata/001_empty_page/add_metadata_success.pdf",
+			output: "testdata/output/add_metadata_success.pdf",
 			title:  "PDF Title",
 		},
 	}

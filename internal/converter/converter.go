@@ -19,7 +19,7 @@ type Converter interface {
 	AddPage(size PdfSize)
 	Convert() (err error)
 
-	parseHtml() (err error)
+	parseHtml()
 	addObj(data []string, stream []byte)
 	addMetadata()
 	addXrefTable()

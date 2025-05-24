@@ -1,13 +1,12 @@
 package converter
 
 import (
-	"io"
 	"strings"
 
 	"golang.org/x/net/html"
 )
 
-func (c *converter) parseHtml() (err error) {
+func (c *converter) parseHtml() {
 	reader := strings.NewReader(string(c.inputData))
 	tokenizer := html.NewTokenizer(reader)
 
@@ -17,35 +16,29 @@ func (c *converter) parseHtml() (err error) {
 		token := tokenizer.Next()
 
 		if token == html.ErrorToken {
-			if tokenizer.Err() == io.EOF {
-				return nil
-			}
-
-			return tokenizer.Err()
+			return
 		}
 
-		if token == html.StartTagToken || token == html.EndTagToken {
-			tagName, _ := tokenizer.TagName()
+		if token != html.StartTagToken && token != html.EndTagToken {
+			continue
+		}
 
-			if len(tagName) <= 0 {
+		tagName, _ := tokenizer.TagName()
+
+		if token == html.StartTagToken {
+			depth++
+			token = tokenizer.Next()
+
+			if token != html.TextToken {
 				continue
 			}
 
-			if token == html.StartTagToken {
-				depth++
-				token = tokenizer.Next()
+			processTag(c, tokenizer, string(tagName))
 
-				if token != html.TextToken {
-					continue
-				}
-
-				processTag(c, tokenizer, string(tagName))
-
-				continue
-			}
-
-			depth--
+			continue
 		}
+
+		depth--
 	}
 }
 

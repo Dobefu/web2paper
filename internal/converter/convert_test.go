@@ -14,7 +14,12 @@ func TestConvert(t *testing.T) {
 	}{
 		"success": {
 			input:         "testdata/001_empty_page/index.html",
-			output:        "testdata/001_empty_page/convert_success.pdf",
+			output:        "testdata/output/convert_success.pdf",
+			shouldSucceed: true,
+		},
+		"edge cases": {
+			input:         "testdata/000_invalid_html/index.html",
+			output:        "testdata/output/convert_edge_cases.pdf",
 			shouldSucceed: true,
 		},
 	}
@@ -28,9 +33,9 @@ func TestConvert(t *testing.T) {
 			err = c.Convert()
 
 			if test.shouldSucceed {
-				assert.NoError(t, err)
+				assert.NoError(t, err, "should not return an error")
 			} else {
-				assert.Error(t, err)
+				assert.Error(t, err, "should return an error")
 			}
 		})
 	}

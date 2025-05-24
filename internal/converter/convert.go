@@ -6,11 +6,7 @@ import (
 )
 
 func (c *converter) Convert() (err error) {
-	err = c.parseHtml()
-
-	if err != nil {
-		return err
-	}
+	c.parseHtml()
 
 	c.outputData.Write([]byte{'\200', '\201', '\202', '\203', '\n'})
 
