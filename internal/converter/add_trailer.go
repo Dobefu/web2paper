@@ -19,6 +19,7 @@ func (c *converter) addTrailer() {
 	c.outputData.WriteString("trailer")
 	c.outputData.WriteString("<</Root 1 0 R")
 	c.outputData.WriteString(fmt.Sprintf("/Size %d", (len(c.objs) + 1)))
+	c.outputData.WriteString(fmt.Sprintf("/Info %d 0 R", (len(c.objs))))
 	c.outputData.WriteString(fmt.Sprintf("/ID[(%s)(%s)]", pdfId, revisionId))
 	c.outputData.WriteString(">>\n")
 }

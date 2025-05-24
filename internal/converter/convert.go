@@ -8,7 +8,7 @@ import (
 func (c *converter) Convert() (err error) {
 	c.parseHtml()
 
-	c.outputData.Write([]byte{'\200', '\201', '\202', '\203', '\n'})
+	c.outputData.Write([]byte{'%', '\200', '\201', '\202', '\203', '\n'})
 
 	c.addObj([]string{
 		"/Type",

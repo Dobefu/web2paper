@@ -45,11 +45,12 @@ type metadataTitleLi struct {
 }
 
 func (c *converter) addMetadata() {
+	producer := "Web2Paper (https://github.com/Dobefu/web2paper)"
+
 	marshalledXml, _ := xml.Marshal(
 		metadata{
 			Namespace: "adobe:ns:meta/",
 			Rdf: metadataRdf{
-
 				Namespace: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
 				Description: []metadataDescription{
 					{
@@ -75,7 +76,7 @@ func (c *converter) addMetadata() {
 						About:        "",
 
 						Title:    nil,
-						Producer: "Web2Paper (https://github.com/Dobefu/web2paper)",
+						Producer: producer,
 					},
 				},
 			},
@@ -97,4 +98,9 @@ func (c *converter) addMetadata() {
 		},
 		metadataXml.Bytes(),
 	)
+
+	c.addObj([]string{
+		fmt.Sprintf("/Title(%s)", c.title),
+		fmt.Sprintf("/Producer(%s)", producer),
+	}, nil)
 }
