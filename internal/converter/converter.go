@@ -2,9 +2,7 @@ package converter
 
 import (
 	"bytes"
-	"crypto/md5"
 	"fmt"
-	"hash"
 	"os"
 )
 
@@ -36,7 +34,6 @@ type converter struct {
 	inputData  []byte
 	outputData bytes.Buffer
 	outputPath string
-	idHasher   hash.Hash
 
 	objs       []Obj
 	xrefOffset int
@@ -55,7 +52,6 @@ func New(input string, output string) (c Converter, err error) {
 		inputData:  data,
 		outputData: bytes.Buffer{},
 		outputPath: output,
-		idHasher:   md5.New(),
 
 		objs:       []Obj{},
 		xrefOffset: 0,

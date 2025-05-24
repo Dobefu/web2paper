@@ -1,17 +1,20 @@
 package converter
 
 import (
+	"crypto/md5"
 	"fmt"
 	"time"
 )
 
 func (c *converter) addTrailer() {
-	c.idHasher.Write(c.outputData.Bytes())
-	pdfId := fmt.Sprintf("%x", c.idHasher.Sum(nil))[:16]
+	hasher := md5.New()
 
-	_, _ = fmt.Fprintf(c.idHasher, "%d", time.Now().UnixNano())
-	revisionId := fmt.Sprintf("%x", c.idHasher.Sum(nil))[:16]
-	c.idHasher.Reset()
+	hasher.Write(c.outputData.Bytes())
+	pdfId := fmt.Sprintf("%x", hasher.Sum(nil))[:16]
+
+	_, _ = fmt.Fprintf(hasher, "%d", time.Now().UnixNano())
+	revisionId := fmt.Sprintf("%x", hasher.Sum(nil))[:16]
+	hasher.Reset()
 
 	c.outputData.WriteString("trailer")
 	c.outputData.WriteString("<</Root 1 0 R")
