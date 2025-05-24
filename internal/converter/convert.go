@@ -38,12 +38,7 @@ func (c *converter) Convert() (err error) {
 		}, nil)
 	}
 
-	err = c.addMetadata()
-
-	if err != nil {
-		return err
-	}
-
+	c.addMetadata()
 	c.addXrefTable()
 	c.addTrailer()
 	c.addXrefOffset()

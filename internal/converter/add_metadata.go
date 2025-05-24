@@ -36,8 +36,8 @@ type metadataTitle struct {
 	Language string `xml:"xml:lang,attr"`
 }
 
-func (c *converter) addMetadata() (err error) {
-	marshalledXml, err := xml.Marshal(
+func (c *converter) addMetadata() {
+	marshalledXml, _ := xml.Marshal(
 		metadata{
 			Namespace: "adobe:ns:meta/",
 			Rdf: metadataRdf{
@@ -60,10 +60,6 @@ func (c *converter) addMetadata() (err error) {
 		},
 	)
 
-	if err != nil {
-		return err
-	}
-
 	metadataXml := bytes.NewBuffer([]byte(strings.TrimRight(xml.Header, "\n")))
 	metadataXml.WriteString("<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>")
 	metadataXml.Write(marshalledXml)
@@ -80,5 +76,5 @@ func (c *converter) addMetadata() (err error) {
 		metadataXml.Bytes(),
 	)
 
-	return nil
+	return
 }
