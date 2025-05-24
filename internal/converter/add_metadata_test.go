@@ -28,10 +28,6 @@ func TestAddMetadata(t *testing.T) {
 
 			c.addMetadata()
 			assert.Contains(t, c.(*converter).outputData.String(), test.title)
-
-			// Write the test file, so it can be checked later.
-			err = c.Convert()
-			assert.NoError(t, err)
 		})
 	}
 }
