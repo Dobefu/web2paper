@@ -20,7 +20,8 @@ type Converter interface {
 	Convert() (err error)
 
 	parseHtml() (err error)
-	addObj(data ...string)
+	addObj(data []string, stream []byte)
+	addMetadata() (err error)
 	addXrefTable()
 	addTrailer()
 	addXrefOffset()

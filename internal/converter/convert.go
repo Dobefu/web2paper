@@ -6,19 +6,42 @@ import (
 )
 
 func (c *converter) Convert() (err error) {
-	c.parseHtml()
+	err = c.parseHtml()
 
-	c.addObj("/Type", "/Catalog", "/Pages 2 0 R")
-	c.addObj("/Type", "/Pages", "/Kids[3 0 R]", fmt.Sprintf("/Count %d", len(c.pages)))
+	if err != nil {
+		return err
+	}
+
+	c.outputData.Write([]byte{'\200', '\201', '\202', '\203', '\n'})
+
+	c.addObj([]string{
+		"/Type",
+		"/Catalog",
+		"/Pages 2 0 R",
+		fmt.Sprintf("/Metadata %d 0 R", (len(c.pages) + 3)),
+	}, nil)
+
+	c.addObj([]string{
+		"/Type",
+		"/Pages",
+		"/Kids[3 0 R]",
+		fmt.Sprintf("/Count %d", len(c.pages)),
+	}, nil)
 
 	for _, page := range c.pages {
-		c.addObj(
+		c.addObj([]string{
 			"/Type",
 			"/Page",
 			"/Parent 2 0 R",
 			"/Resources<<>>",
 			fmt.Sprintf("/MediaBox[0 0 %.2f %.2f]", page.Size.Width, page.Size.Height),
-		)
+		}, nil)
+	}
+
+	err = c.addMetadata()
+
+	if err != nil {
+		return err
 	}
 
 	c.addXrefTable()

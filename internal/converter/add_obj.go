@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (c *converter) addObj(data ...string) {
+func (c *converter) addObj(data []string, stream []byte) {
 	obj := bytes.Buffer{}
 
 	obj.WriteString(fmt.Sprintf("%d 0 obj", (len(c.objs) + 1)))
@@ -16,6 +16,13 @@ func (c *converter) addObj(data ...string) {
 	}
 
 	obj.WriteString(">>")
+
+	if stream != nil {
+		obj.WriteString("\nstream\n")
+		obj.Write(stream)
+		obj.WriteString("\nendstream\n")
+	}
+
 	obj.WriteString("endobj\n")
 
 	c.objs = append(c.objs, Obj{

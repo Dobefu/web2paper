@@ -1,6 +1,7 @@
 package converter
 
 import (
+	"io"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -16,6 +17,10 @@ func (c *converter) parseHtml() (err error) {
 		token := tokenizer.Next()
 
 		if token == html.ErrorToken {
+			if tokenizer.Err() == io.EOF {
+				return nil
+			}
+
 			return tokenizer.Err()
 		}
 
