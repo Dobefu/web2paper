@@ -18,22 +18,30 @@ type metadataRdf struct {
 	XMLName   xml.Name `xml:"rdf:RDF"`
 	Namespace string   `xml:"xmlns:rdf,attr"`
 
-	Description []metadataDescription
+	Description []metadataDescription `xml:"rdf:Description"`
 }
 
 type metadataDescription struct {
-	XMLName   xml.Name `xml:"rdf:Description"`
-	Namespace string   `xml:"xmlns:dc,attr"`
-	About     string   `xml:"rdf:about,attr"`
+	NamespaceDc  string `xml:"xmlns:dc,attr,omitempty"`
+	NamespacePdf string `xml:"xmlns:pdf,attr,omitempty"`
+	About        string `xml:"rdf:about,attr"`
 
-	Format string          `xml:"dc:format"`
-	Title  []metadataTitle `xml:"dc:title>rdf:Alt>rdf:li"`
+	Format   string          `xml:"dc:format,omitempty"`
+	Title    []metadataTitle `xml:"dc:title,omitempty"`
+	Producer string          `xml:"pdf:Producer,omitempty"`
 }
 
 type metadataTitle struct {
-	XMLName  xml.Name
+	Languages []metadataTitleAlt `xml:"rdf:Alt,omitempty"`
+}
+
+type metadataTitleAlt struct {
+	Li metadataTitleLi `xml:"rdf:li,omitempty"`
+}
+
+type metadataTitleLi struct {
 	Title    string `xml:",innerxml"`
-	Language string `xml:"xml:lang,attr"`
+	Language string `xml:"xml:lang,attr,omitempty"`
 }
 
 func (c *converter) addMetadata() {
@@ -41,19 +49,33 @@ func (c *converter) addMetadata() {
 		metadata{
 			Namespace: "adobe:ns:meta/",
 			Rdf: metadataRdf{
+
 				Namespace: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
 				Description: []metadataDescription{
 					{
-						Namespace: "http://purl.org/dc/elements/1.1/",
-						About:     "",
+						NamespaceDc: "http://purl.org/dc/elements/1.1/",
+						About:       "",
 
 						Format: "application/pdf",
 						Title: []metadataTitle{
 							{
-								Title:    c.title,
-								Language: "x-default",
+								Languages: []metadataTitleAlt{
+									{
+										Li: metadataTitleLi{
+											Title:    c.title,
+											Language: "x-default",
+										},
+									},
+								},
 							},
 						},
+					},
+					{
+						NamespacePdf: "http://ns.adobe.com/pdf/1.3/",
+						About:        "",
+
+						Title:    nil,
+						Producer: "Web2Paper (https://github.com/Dobefu/web2paper)",
 					},
 				},
 			},
@@ -75,6 +97,4 @@ func (c *converter) addMetadata() {
 		},
 		metadataXml.Bytes(),
 	)
-
-	return
 }
