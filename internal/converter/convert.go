@@ -41,7 +41,6 @@ func (c *converter) Convert() (err error) {
 		}, nil)
 
 		textOptions := textOptionsNew()
-		textOptions.Spacing = 1
 		content := c.formatTextObj(
 			24,
 			int(PdfSizeA4.Width)/2,
