@@ -47,7 +47,7 @@ func (c *converter) Convert() (err error) {
 			24,
 			PdfSizeA4.Width/2,
 			PdfSizeA4.Height/2,
-			"Some text",
+			c.textContent,
 			textOptions,
 		)
 
