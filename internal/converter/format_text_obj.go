@@ -9,6 +9,13 @@ type renderingMode byte
 
 const (
 	renderingModeFill = iota
+	renderingModeStroke
+	renderingModeFillStroke
+	renderingModeNone
+	renderingModeFillClip
+	renderingModeStrokeClip
+	renderingModeFillStrokeClip
+	renderingModeClip
 )
 
 type _textOptions struct {
