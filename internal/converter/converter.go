@@ -27,6 +27,8 @@ type Converter interface {
 	addTrailer()
 	addXrefOffset()
 	addEOF()
+
+	formatTextObj(fontSize int, x int, y int, text string) (textObj []byte)
 }
 
 type converter struct {

@@ -40,7 +40,8 @@ func (c *converter) Convert() (err error) {
 			fmt.Sprintf("/MediaBox[0 0 %.2f %.2f]", page.Size.Width, page.Size.Height),
 		}, nil)
 
-		content := []byte("BT\n/F1 24 Tf\n0 0 Td\n(PAGE) Tj\nET")
+		content := c.formatTextObj(24, int(PdfSizeA4.Width)/2, int(PdfSizeA4.Height)/2, "Some text")
+
 		c.addObj([]string{
 			fmt.Sprintf("/Length %d", len(content)),
 		}, content)
