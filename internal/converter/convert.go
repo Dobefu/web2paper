@@ -35,9 +35,15 @@ func (c *converter) Convert() (err error) {
 			"/Type",
 			"/Page",
 			fmt.Sprintf("/Parent %d 0 R", pagesRefOffset),
-			"/Resources<<>>",
+			fmt.Sprintf("/Resources<</Font<</F1 %d 0 R>>>>", ((len(c.pages) * 2) + pagesRefOffset + 1)),
+			fmt.Sprintf("/Contents %d 0 R", (len(c.objs) + 2)),
 			fmt.Sprintf("/MediaBox[0 0 %.2f %.2f]", page.Size.Width, page.Size.Height),
 		}, nil)
+
+		content := []byte("BT\n/F1 24 Tf\n0 0 Td\n(PAGE) Tj\nET")
+		c.addObj([]string{
+			fmt.Sprintf("/Length %d", len(content)),
+		}, content)
 	}
 
 	c.addObj([]string{
@@ -69,7 +75,7 @@ func renderPagesKidsString(c *converter) (output string) {
 	buf := []string{}
 
 	for pageNum := range len(c.pages) {
-		buf = append(buf, fmt.Sprintf("%d 0 R", (pageNum+len(c.objs)+2)))
+		buf = append(buf, fmt.Sprintf("%d 0 R", ((pageNum*2)+(len(c.objs)+2))))
 	}
 
 	return fmt.Sprintf("/Kids[%s]", strings.Join(buf, " "))

@@ -39,7 +39,7 @@ func runConvertCmd(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	pdfConverter.AddPage(converter.PdfSize(converter.PdfSizeA0))
+	pdfConverter.AddPage(converter.PdfSize(converter.PdfSizeA4))
 	err = pdfConverter.Convert()
 
 	if err != nil {
