@@ -14,11 +14,13 @@ func (c *converter) Convert() (err error) {
 
 	c.outputData.Write([]byte{'%', '\200', '\201', '\202', '\203', '\n'})
 
+	pagesRefOffset := len(c.objs) + 2
+
 	c.addObj([]string{
 		"/Type",
 		"/Catalog",
-		fmt.Sprintf("/Pages %d 0 R", (len(c.objs) + 2)),
-		fmt.Sprintf("/Metadata %d 0 R", (len(c.pages) + 3)),
+		fmt.Sprintf("/Pages %d 0 R", pagesRefOffset),
+		fmt.Sprintf("/Metadata %d 0 R", (len(c.pages) + pagesRefOffset)),
 	}, nil)
 
 	c.addObj([]string{
@@ -32,11 +34,20 @@ func (c *converter) Convert() (err error) {
 		c.addObj([]string{
 			"/Type",
 			"/Page",
-			"/Parent 2 0 R",
+			fmt.Sprintf("/Parent %d 0 R", pagesRefOffset),
 			"/Resources<<>>",
 			fmt.Sprintf("/MediaBox[0 0 %.2f %.2f]", page.Size.Width, page.Size.Height),
 		}, nil)
 	}
+
+	c.addObj([]string{
+		"/Type",
+		"/Font",
+		"/Subtype",
+		"/Type1",
+		"/BaseFont",
+		"/Helvetica",
+	}, nil)
 
 	c.addMetadata()
 	c.addXrefTable()
