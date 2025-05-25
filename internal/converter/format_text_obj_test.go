@@ -63,6 +63,20 @@ func TestFormatTextObj(t *testing.T) {
 			init:          func(textOptions *_textOptions) { textOptions.Rise = 99 },
 			shouldContain: "99 Ts",
 		},
+		"halign center": {
+			input:         "testdata/001_empty_page/index.html",
+			output:        "out.pdf",
+			text:          "Test text",
+			init:          func(textOptions *_textOptions) { textOptions.Halign = alignCenter },
+			shouldContain: "",
+		},
+		"halign right": {
+			input:         "testdata/001_empty_page/index.html",
+			output:        "out.pdf",
+			text:          "Test text",
+			init:          func(textOptions *_textOptions) { textOptions.Halign = alignRight },
+			shouldContain: "",
+		},
 	}
 
 	for name, test := range tests {
