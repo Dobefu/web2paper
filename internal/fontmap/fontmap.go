@@ -7,7 +7,13 @@ type fontmap struct {
 
 func (f *fontmap) GetTextWidth(text string, fontSize int) (width int) {
 	for _, glyph := range text {
-		width += f.CharWidths[glyph]
+		glyphWidth, ok := f.CharWidths[glyph]
+
+		if !ok {
+			glyphWidth = f.CharWidths[' ']
+		}
+
+		width += glyphWidth
 	}
 
 	return width * fontSize / 1000
