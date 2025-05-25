@@ -49,8 +49,8 @@ func textOptionsNew() _textOptions {
 
 func (c *converter) formatTextObj(
 	fontSize int,
-	x int,
-	y int,
+	x float32,
+	y float32,
 	text string,
 	options _textOptions,
 ) (textObj []byte) {
@@ -68,7 +68,7 @@ func (c *converter) formatTextObj(
 
 	buf := bytes.NewBuffer([]byte("BT\n"))       // "Begin Text".
 	fmt.Fprintf(buf, "F1 %d Tf\n", fontSize)     // Font and font size.
-	fmt.Fprintf(buf, "1 0 0 1 %d %d Tm\n", x, y) // Transformation matrix.
+	fmt.Fprintf(buf, "1 0 0 1 %f %f Tm\n", x, y) // Transformation matrix.
 
 	if options.Spacing != textOptionsDefaults.Spacing {
 		fmt.Fprintf(buf, "%d Tc\n", options.Spacing)

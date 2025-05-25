@@ -5,7 +5,7 @@ type fontmap struct {
 	CharWidths map[rune]int
 }
 
-func (f *fontmap) GetTextWidth(text string, fontSize int) (width int) {
+func (f *fontmap) GetTextWidth(text string, fontSize int) (width float32) {
 	for _, glyph := range text {
 		glyphWidth, ok := f.CharWidths[glyph]
 
@@ -13,8 +13,8 @@ func (f *fontmap) GetTextWidth(text string, fontSize int) (width int) {
 			glyphWidth = f.CharWidths[' ']
 		}
 
-		width += glyphWidth
+		width += float32(glyphWidth)
 	}
 
-	return width * fontSize / 1000
+	return width * float32(fontSize) / 1000
 }

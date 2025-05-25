@@ -28,7 +28,7 @@ type Converter interface {
 	addXrefOffset()
 	addEOF()
 
-	formatTextObj(fontSize int, x int, y int, text string, options _textOptions) (textObj []byte)
+	formatTextObj(fontSize int, x float32, y float32, text string, options _textOptions) (textObj []byte)
 }
 
 type converter struct {
