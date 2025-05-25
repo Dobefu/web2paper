@@ -11,11 +11,13 @@ func TestAddMetadata(t *testing.T) {
 		input  string
 		output string
 		title  string
+		author string
 	}{
 		"success": {
 			input:  "testdata/001_empty_page/index.html",
 			output: "testdata/output/add_metadata_success.pdf",
 			title:  "PDF Title",
+			author: "Some Author",
 		},
 	}
 
@@ -25,9 +27,11 @@ func TestAddMetadata(t *testing.T) {
 			assert.NoError(t, err)
 
 			c.(*converter).title = test.title
+			c.(*converter).author = test.author
 
 			c.addMetadata()
 			assert.Contains(t, c.(*converter).outputData.String(), test.title)
+			assert.Contains(t, c.(*converter).outputData.String(), test.author)
 		})
 	}
 }
