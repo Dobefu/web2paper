@@ -100,11 +100,16 @@ func (c *converter) addMetadata() {
 	)
 
 	date := c.creationDate.Format("20060102150405-07")
-
-	c.addObj([]string{
+	metaObjData := []string{
 		fmt.Sprintf("/Title(%s)", c.title),
 		fmt.Sprintf("/Producer(%s)", producer),
 		fmt.Sprintf("/CreationDate(D:%s'00')", date),
 		fmt.Sprintf("/ModDate(D:%s'00')", date),
-	}, nil)
+	}
+
+	if c.author != "" {
+		metaObjData = append(metaObjData, fmt.Sprintf("/Author(%s)", c.author))
+	}
+
+	c.addObj(metaObjData, nil)
 }

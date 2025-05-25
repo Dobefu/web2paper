@@ -32,8 +32,9 @@ type Converter interface {
 type converter struct {
 	Converter
 
-	title string
-	pages []Page
+	title  string
+	author string
+	pages  []Page
 
 	inputData  []byte
 	outputData bytes.Buffer
@@ -52,8 +53,9 @@ func New(input string, output string) (c Converter, err error) {
 	}
 
 	conv := &converter{
-		title: "",
-		pages: []Page{},
+		title:  "",
+		author: "",
+		pages:  []Page{},
 
 		inputData:  data,
 		outputData: bytes.Buffer{},
