@@ -3,9 +3,12 @@ package converter
 import (
 	"bytes"
 	"fmt"
+
+	"github.com/Dobefu/web2paper/internal/fontmap"
 )
 
 type renderingMode byte
+type align byte
 
 const (
 	renderingModeFill = iota
@@ -16,6 +19,10 @@ const (
 	renderingModeStrokeClip
 	renderingModeFillStrokeClip
 	renderingModeClip
+
+	alignLeft = iota
+	alignCenter
+	alignRight
 )
 
 type _textOptions struct {
@@ -25,6 +32,7 @@ type _textOptions struct {
 	Leading       int
 	RenderingMode renderingMode
 	Rise          int
+	Halign        align
 }
 
 func textOptionsNew() _textOptions {
@@ -35,6 +43,7 @@ func textOptionsNew() _textOptions {
 		Leading:       0,
 		RenderingMode: renderingModeFill,
 		Rise:          0,
+		Halign:        alignLeft,
 	}
 }
 
@@ -47,9 +56,19 @@ func (c *converter) formatTextObj(
 ) (textObj []byte) {
 	textOptionsDefaults := textOptionsNew()
 
-	buf := bytes.NewBuffer([]byte("BT\n"))   // "Begin Text".
-	fmt.Fprintf(buf, "F1 %d Tf\n", fontSize) // Font and font size.
-	fmt.Fprintf(buf, "%d %d Td\n", x, y)     // Coordinates.
+	fm := fontmap.Helvetica
+
+	if options.Halign == alignCenter {
+		x = x - (fm.GetTextWidth(text, fontSize) / 2)
+	}
+
+	if options.Halign == alignRight {
+		x = x - fm.GetTextWidth(text, fontSize)
+	}
+
+	buf := bytes.NewBuffer([]byte("BT\n"))       // "Begin Text".
+	fmt.Fprintf(buf, "F1 %d Tf\n", fontSize)     // Font and font size.
+	fmt.Fprintf(buf, "1 0 0 1 %d %d Tm\n", x, y) // Transformation matrix.
 
 	if options.Spacing != textOptionsDefaults.Spacing {
 		fmt.Fprintf(buf, "%d Tc\n", options.Spacing)
