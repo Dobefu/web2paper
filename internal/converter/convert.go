@@ -3,6 +3,7 @@ package converter
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -16,14 +17,14 @@ func (c *converter) Convert() (err error) {
 	c.addObj([]string{
 		"/Type",
 		"/Catalog",
-		"/Pages 2 0 R",
+		fmt.Sprintf("/Pages %d 0 R", (len(c.objs) + 2)),
 		fmt.Sprintf("/Metadata %d 0 R", (len(c.pages) + 3)),
 	}, nil)
 
 	c.addObj([]string{
 		"/Type",
 		"/Pages",
-		"/Kids[3 0 R]",
+		renderPagesKidsString(c),
 		fmt.Sprintf("/Count %d", len(c.pages)),
 	}, nil)
 
@@ -51,4 +52,14 @@ func (c *converter) Convert() (err error) {
 	}
 
 	return nil
+}
+
+func renderPagesKidsString(c *converter) (output string) {
+	buf := []string{}
+
+	for pageNum := range len(c.pages) {
+		buf = append(buf, fmt.Sprintf("%d 0 R", (pageNum+len(c.objs)+2)))
+	}
+
+	return fmt.Sprintf("/Kids[%s]", strings.Join(buf, " "))
 }
