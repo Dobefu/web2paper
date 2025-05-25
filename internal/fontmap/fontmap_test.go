@@ -12,17 +12,17 @@ func TestGetTextWidth(t *testing.T) {
 	tests := map[string]struct {
 		text     string
 		fontSize int
-		expected int
+		expected float32
 	}{
 		"success": {
 			text:     "test",
 			fontSize: 24,
-			expected: 38,
+			expected: 38.688,
 		},
 		"unknown glyph": {
 			text:     "\u3333",
 			fontSize: 24,
-			expected: 6,
+			expected: 6.672,
 		},
 	}
 
