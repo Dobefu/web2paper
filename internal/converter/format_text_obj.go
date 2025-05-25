@@ -20,9 +20,9 @@ const (
 	renderingModeFillStrokeClip
 	renderingModeClip
 
-	alignLeft = iota
+	alignStart = iota
 	alignCenter
-	alignRight
+	alignEnd
 )
 
 type _textOptions struct {
@@ -33,6 +33,7 @@ type _textOptions struct {
 	RenderingMode renderingMode
 	Rise          int
 	Halign        align
+	Valign        align
 }
 
 func textOptionsNew() _textOptions {
@@ -43,7 +44,8 @@ func textOptionsNew() _textOptions {
 		Leading:       0,
 		RenderingMode: renderingModeFill,
 		Rise:          0,
-		Halign:        alignLeft,
+		Halign:        alignStart,
+		Valign:        alignStart,
 	}
 }
 
@@ -62,8 +64,16 @@ func (c *converter) formatTextObj(
 		x = x - (fm.GetTextWidth(text, fontSize) / 2)
 	}
 
-	if options.Halign == alignRight {
+	if options.Halign == alignEnd {
 		x = x - fm.GetTextWidth(text, fontSize)
+	}
+
+	if options.Valign == alignCenter {
+		y += (float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000) / 2
+	}
+
+	if options.Valign == alignEnd {
+		y += float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000
 	}
 
 	buf := bytes.NewBuffer([]byte("BT\n"))       // "Begin Text".

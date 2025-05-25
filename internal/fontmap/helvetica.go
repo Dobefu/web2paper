@@ -1,7 +1,10 @@
 package fontmap
 
 var Helvetica = fontmap{
-	CharHeight: 925,
+	Ascent:    931,
+	Descent:   -225,
+	CapHeight: 718,
+	XHeight:   523,
 	CharWidths: map[rune]int{
 		0:    278,
 		1:    278,

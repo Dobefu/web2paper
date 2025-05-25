@@ -42,6 +42,7 @@ func (c *converter) Convert() (err error) {
 
 		textOptions := textOptionsNew()
 		textOptions.Halign = alignCenter
+		textOptions.Valign = alignCenter
 		content := c.formatTextObj(
 			24,
 			PdfSizeA4.Width/2,

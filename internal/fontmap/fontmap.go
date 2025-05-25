@@ -1,7 +1,10 @@
 package fontmap
 
 type fontmap struct {
-	CharHeight int
+	Ascent     int
+	Descent    int
+	CapHeight  int
+	XHeight    int
 	CharWidths map[rune]int
 }
 

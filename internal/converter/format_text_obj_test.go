@@ -74,7 +74,7 @@ func TestFormatTextObj(t *testing.T) {
 			input:         "testdata/001_empty_page/index.html",
 			output:        "out.pdf",
 			text:          "Test text",
-			init:          func(textOptions *_textOptions) { textOptions.Halign = alignRight },
+			init:          func(textOptions *_textOptions) { textOptions.Halign = alignEnd },
 			shouldContain: "",
 		},
 	}
