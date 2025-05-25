@@ -19,21 +19,19 @@ func (c *converter) parseHtml() {
 			return
 		}
 
-		if token != html.StartTagToken && token != html.EndTagToken {
-			continue
-		}
-
 		tagName, _ := tokenizer.TagName()
 
-		if token == html.StartTagToken {
+		if token == html.StartTagToken || token == html.SelfClosingTagToken {
 			depth++
+
+			attrs := getAttrs(tokenizer)
 			token = tokenizer.Next()
 
 			if token != html.TextToken {
 				continue
 			}
 
-			processTag(c, tokenizer, string(tagName))
+			processTag(c, tokenizer, string(tagName), attrs)
 
 			continue
 		}
@@ -42,9 +40,50 @@ func (c *converter) parseHtml() {
 	}
 }
 
-func processTag(c *converter, tokenizer *html.Tokenizer, tagName string) {
+func getAttrs(tokenizer *html.Tokenizer) (attrs map[string]string) {
+	attrs = make(map[string]string)
+
+	for {
+		key, val, moreAttr := tokenizer.TagAttr()
+
+		if string(key) == "" {
+			break
+		}
+
+		attrs[string(key)] = string(val)
+
+		if !moreAttr {
+			break
+		}
+	}
+
+	return attrs
+}
+
+func processTag(
+	c *converter,
+	tokenizer *html.Tokenizer,
+	tagName string,
+	attrs map[string]string,
+) {
 	switch tagName {
 	case "title":
 		c.title = tokenizer.Token().Data
+	case "meta":
+		name, hasName := attrs["name"]
+		content, hasContent := attrs["content"]
+
+		if !hasName || !hasContent {
+			break
+		}
+
+		processMetaValue(c, name, content)
+	}
+}
+
+func processMetaValue(c *converter, key string, value string) {
+	switch key {
+	case "author":
+		c.author = value
 	}
 }
