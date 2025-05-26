@@ -12,14 +12,19 @@ func TestConvert(t *testing.T) {
 		output        string
 		shouldSucceed bool
 	}{
-		"success": {
-			input:         "testdata/001_empty_page/index.html",
-			output:        "testdata/output/convert_success.pdf",
-			shouldSucceed: true,
-		},
 		"edge cases": {
 			input:         "testdata/000_invalid_html/index.html",
 			output:        "testdata/output/convert_edge_cases.pdf",
+			shouldSucceed: true,
+		},
+		"success 001": {
+			input:         "testdata/001_empty_page/index.html",
+			output:        "testdata/output/convert_success_001.pdf",
+			shouldSucceed: true,
+		},
+		"success 002": {
+			input:         "testdata/002_text_page/index.html",
+			output:        "testdata/output/convert_success_002.pdf",
 			shouldSucceed: true,
 		},
 	}

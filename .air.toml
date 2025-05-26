@@ -3,7 +3,7 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-  args_bin = ["-l 0", "convert", "-i internal/converter/testdata/001_empty_page/index.html", "-o tmp/out.pdf"]
+  args_bin = ["-l 0", "convert", "-i internal/converter/testdata/002_text_page/index.html", "-o tmp/out.pdf"]
   bin = "./web2paper"
   cmd = "go build -buildvcs=false"
   delay = 100
