@@ -6,36 +6,12 @@ import (
 	"golang.org/x/net/html"
 )
 
-func (p *HtmlParser) ParseHtml(data []byte) {
+func (p *HtmlParser) ParseHtml(data []byte) (err error) {
 	reader := strings.NewReader(string(data))
-	tokenizer := html.NewTokenizer(reader)
+	rootNode, _ := html.Parse(reader)
 
-	depth := 0
+	p.dom = rootNode
+	p.collectMetadata()
 
-	for {
-		token := tokenizer.Next()
-
-		if token == html.ErrorToken {
-			return
-		}
-
-		tagName, _ := tokenizer.TagName()
-
-		if token == html.StartTagToken || token == html.SelfClosingTagToken {
-			depth++
-
-			attrs := p.getAttrs(tokenizer)
-			token = tokenizer.Next()
-
-			if token != html.TextToken {
-				continue
-			}
-
-			p.processTag(tokenizer, string(tagName), attrs)
-
-			continue
-		}
-
-		depth--
-	}
+	return nil
 }

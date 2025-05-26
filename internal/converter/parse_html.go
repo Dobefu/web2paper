@@ -6,9 +6,9 @@ import (
 
 func (c *converter) parseHtml() {
 	htmlParser := html_parser.HtmlParser{}
-	htmlParser.ParseHtml(c.inputData)
+	_ = htmlParser.ParseHtml(c.inputData)
+	c.textContent = htmlParser.GetElementData()
 
 	c.title = htmlParser.Metadata.Title
 	c.author = htmlParser.Metadata.Author
-	c.textContent = htmlParser.TextContent
 }

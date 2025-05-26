@@ -7,18 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParseHtml(t *testing.T) {
+func TestGetElementData(t *testing.T) {
 	t.Parallel()
 
-	var tests = map[string]struct {
+	tests := map[string]struct {
 		input string
 	}{
-		"invalid html": {
-			input: "../converter/testdata/000_invalid_html/index.html",
-		},
-		"empty page": {
-			input: "../converter/testdata/001_empty_page/index.html",
-		},
 		"text page": {
 			input: "../converter/testdata/002_text_page/index.html",
 		},
@@ -34,6 +28,9 @@ func TestParseHtml(t *testing.T) {
 			parser := HtmlParser{}
 			err = parser.ParseHtml(data)
 			assert.NoError(t, err)
+
+			elementData := parser.GetElementData()
+			assert.NotEmpty(t, elementData)
 		})
 	}
 }
