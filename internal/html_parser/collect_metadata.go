@@ -6,27 +6,29 @@ func (p *HtmlParser) collectMetadata() {
 			p.Metadata.Title = descendant.FirstChild.Data
 		}
 
-		if descendant.Data == "meta" {
-			name := ""
-			content := ""
+		if descendant.Data != "meta" {
+			continue
+		}
 
-			for _, attr := range descendant.Attr {
-				switch attr.Key {
-				case "name":
-					name = attr.Val
-				case "content":
-					content = attr.Val
-				}
-			}
+		name := ""
+		content := ""
 
-			if name == "" || content == "" {
-				continue
+		for _, attr := range descendant.Attr {
+			switch attr.Key {
+			case "name":
+				name = attr.Val
+			case "content":
+				content = attr.Val
 			}
+		}
 
-			switch name {
-			case "author":
-				p.Metadata.Author = content
-			}
+		if name == "" || content == "" {
+			continue
+		}
+
+		switch name {
+		case "author":
+			p.Metadata.Author = content
 		}
 	}
 }
