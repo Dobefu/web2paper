@@ -7,6 +7,8 @@ import (
 )
 
 func TestFormatTextObj(t *testing.T) {
+	t.Parallel()
+
 	tests := map[string]struct {
 		input         string
 		output        string
@@ -95,6 +97,8 @@ func TestFormatTextObj(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
 			c, err := New(test.input, test.output)
 			assert.NoError(t, err)
 

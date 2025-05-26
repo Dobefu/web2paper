@@ -7,6 +7,8 @@ import (
 )
 
 func TestAddPage(t *testing.T) {
+	t.Parallel()
+
 	conv := converter{}
 	assert.Equal(t, len(conv.pages), 0)
 
