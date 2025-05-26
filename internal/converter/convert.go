@@ -40,16 +40,21 @@ func (c *converter) Convert() (err error) {
 			fmt.Sprintf("/MediaBox[0 0 %.2f %.2f]", page.Size.Width, page.Size.Height),
 		}, nil)
 
-		textOptions := textOptionsNew()
-		textOptions.Halign = alignCenter
-		textOptions.Valign = alignCenter
-		content := c.formatTextObj(
-			24,
-			PdfSizeA4.Width/2,
-			PdfSizeA4.Height/2,
-			c.textContent,
-			textOptions,
-		)
+		content := []byte{}
+
+		for _, text := range c.textContent {
+			textOptions := textOptionsNew()
+			textOptions.Halign = alignCenter
+			textOptions.Valign = alignCenter
+
+			content = append(content, c.formatTextObj(
+				24,
+				PdfSizeA4.Width/2,
+				PdfSizeA4.Height/2,
+				text,
+				textOptions,
+			)...)
+		}
 
 		c.addObj([]string{
 			fmt.Sprintf("/Length %d", len(content)),

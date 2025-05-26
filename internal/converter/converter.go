@@ -34,10 +34,11 @@ type Converter interface {
 type converter struct {
 	Converter
 
-	title       string
-	author      string
-	pages       []Page
-	textContent string // TODO: Create a virtual DOM instead of a single string.
+	title  string
+	author string
+	pages  []Page
+	// TODO: Create a virtual DOM instead of a single string slice.
+	textContent []string
 
 	inputData  []byte
 	outputData bytes.Buffer

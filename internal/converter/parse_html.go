@@ -69,8 +69,6 @@ func processTag(
 	switch tagName {
 	case "title":
 		c.title = tokenizer.Token().Data
-	case "h1":
-		c.textContent = tokenizer.Token().Data
 	case "meta":
 		name, hasName := attrs["name"]
 		content, hasContent := attrs["content"]
@@ -80,6 +78,12 @@ func processTag(
 		}
 
 		processMetaValue(c, name, content)
+	case "html":
+	case "head":
+	case "body":
+		break
+	default:
+		c.textContent = append(c.textContent, tokenizer.Token().Data)
 	}
 }
 
