@@ -52,9 +52,11 @@ func TestConvert(t *testing.T) {
 
 func BenchmarkConvert(b *testing.B) {
 	for b.Loop() {
+		b.StopTimer()
 		c, _ := New("testdata/001_empty_page/index.html", "/dev/null")
-
 		c.AddPage(PdfSize(PdfSizeA4))
+		b.StartTimer()
+
 		_ = c.Convert()
 	}
 }

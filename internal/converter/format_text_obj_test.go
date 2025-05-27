@@ -117,3 +117,14 @@ func TestFormatTextObj(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkFormatTextObj(b *testing.B) {
+	c, _ := New("testdata/001_empty_page/index.html", "/dev/null")
+	textOptions := textOptionsNew()
+
+	b.ResetTimer()
+
+	for b.Loop() {
+		_ = c.formatTextObj(24, 0, 0, "Test text", textOptions)
+	}
+}
