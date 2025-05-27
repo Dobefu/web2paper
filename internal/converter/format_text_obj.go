@@ -75,7 +75,8 @@ func (c *converter) formatTextObj(
 		y += fontHeight
 	}
 
-	buf := bytes.NewBuffer([]byte("BT\n"))       // "Begin Text".
+	buf := &bytes.Buffer{}
+	fmt.Fprintf(buf, "BT\n")                     // "Begin Text".
 	fmt.Fprintf(buf, "/F1 %d Tf\n", fontSize)    // Font and font size.
 	fmt.Fprintf(buf, "1 0 0 1 %f %f Tm\n", x, y) // Transformation matrix.
 

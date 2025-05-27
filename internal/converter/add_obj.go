@@ -6,9 +6,9 @@ import (
 )
 
 func (c *converter) addObj(data []string, stream []byte) {
-	obj := bytes.Buffer{}
+	obj := &bytes.Buffer{}
 
-	obj.WriteString(fmt.Sprintf("%d 0 obj", (len(c.objs) + 1)))
+	fmt.Fprintf(obj, "%d 0 obj", (len(c.objs) + 1))
 	obj.WriteString("<<")
 
 	for _, item := range data {
@@ -26,7 +26,7 @@ func (c *converter) addObj(data []string, stream []byte) {
 	obj.WriteString("endobj\n")
 
 	c.objs = append(c.objs, Obj{
-		buf:    obj,
+		buf:    *obj,
 		offset: len(c.outputData.Bytes()),
 	})
 
