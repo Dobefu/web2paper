@@ -3,6 +3,7 @@ package converter
 import (
 	"testing"
 
+	"github.com/Dobefu/web2paper/internal/html_parser"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -69,28 +70,28 @@ func TestFormatTextObj(t *testing.T) {
 			input:         "testdata/001_empty_page/index.html",
 			output:        "out.pdf",
 			text:          "Test text",
-			init:          func(textOptions *_textOptions) { textOptions.Halign = alignCenter },
+			init:          func(textOptions *_textOptions) { textOptions.Halign = html_parser.AlignCenter },
 			shouldContain: "",
 		},
 		"halign right": {
 			input:         "testdata/001_empty_page/index.html",
 			output:        "out.pdf",
 			text:          "Test text",
-			init:          func(textOptions *_textOptions) { textOptions.Halign = alignEnd },
+			init:          func(textOptions *_textOptions) { textOptions.Halign = html_parser.AlignEnd },
 			shouldContain: "",
 		},
 		"valign center": {
 			input:         "testdata/001_empty_page/index.html",
 			output:        "out.pdf",
 			text:          "Test text",
-			init:          func(textOptions *_textOptions) { textOptions.Valign = alignCenter },
+			init:          func(textOptions *_textOptions) { textOptions.Valign = html_parser.AlignCenter },
 			shouldContain: "",
 		},
 		"valign right": {
 			input:         "testdata/001_empty_page/index.html",
 			output:        "out.pdf",
 			text:          "Test text",
-			init:          func(textOptions *_textOptions) { textOptions.Valign = alignEnd },
+			init:          func(textOptions *_textOptions) { textOptions.Valign = html_parser.AlignEnd },
 			shouldContain: "",
 		},
 	}

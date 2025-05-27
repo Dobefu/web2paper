@@ -4,7 +4,7 @@ import "golang.org/x/net/html"
 
 type htmlParser interface {
 	ParseHtml(data []byte) (err error)
-	GetElementData() (elementData []string)
+	GetElementData() (elementData []ElementData)
 
 	collectMetadata()
 }

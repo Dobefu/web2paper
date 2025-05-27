@@ -11,10 +11,12 @@ func TestGetElementData(t *testing.T) {
 	t.Parallel()
 
 	tests := map[string]struct {
-		input string
+		input      string
+		pageWidths []float32
 	}{
 		"text page": {
-			input: "../converter/testdata/002_text_page/index.html",
+			input:      "../converter/testdata/002_text_page/index.html",
+			pageWidths: []float32{768},
 		},
 	}
 
@@ -29,7 +31,7 @@ func TestGetElementData(t *testing.T) {
 			err = parser.ParseHtml(data)
 			assert.NoError(t, err)
 
-			elementData := parser.GetElementData()
+			elementData := parser.GetElementData(test.pageWidths)
 			assert.NotEmpty(t, elementData)
 		})
 	}

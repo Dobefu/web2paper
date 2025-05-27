@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/Dobefu/web2paper/internal/fontmap"
+	"github.com/Dobefu/web2paper/internal/html_parser"
 )
 
 type renderingMode byte
-type align byte
 
 const (
 	renderingModeFill = iota
@@ -19,10 +19,6 @@ const (
 	renderingModeStrokeClip
 	renderingModeFillStrokeClip
 	renderingModeClip
-
-	alignStart = iota
-	alignCenter
-	alignEnd
 )
 
 type _textOptions struct {
@@ -32,8 +28,8 @@ type _textOptions struct {
 	Leading       int
 	RenderingMode renderingMode
 	Rise          int
-	Halign        align
-	Valign        align
+	Halign        html_parser.Align
+	Valign        html_parser.Align
 }
 
 func textOptionsNew() _textOptions {
@@ -44,8 +40,8 @@ func textOptionsNew() _textOptions {
 		Leading:       0,
 		RenderingMode: renderingModeFill,
 		Rise:          0,
-		Halign:        alignStart,
-		Valign:        alignStart,
+		Halign:        html_parser.AlignStart,
+		Valign:        html_parser.AlignStart,
 	}
 }
 
@@ -60,20 +56,20 @@ func (c *converter) formatTextObj(
 
 	fm := fontmap.Helvetica
 
-	if options.Halign == alignCenter {
+	if options.Halign == html_parser.AlignCenter {
 		x = x - (fm.GetTextWidth(text, fontSize) / 2)
 	}
 
-	if options.Halign == alignEnd {
+	if options.Halign == html_parser.AlignEnd {
 		x = x - fm.GetTextWidth(text, fontSize)
 	}
 
-	if options.Valign == alignCenter {
-		y += (float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000) / 2
+	if options.Valign == html_parser.AlignCenter {
+		y -= (float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000) / 2
 	}
 
-	if options.Valign == alignEnd {
-		y += float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000
+	if options.Valign == html_parser.AlignEnd {
+		y -= float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000
 	}
 
 	buf := bytes.NewBuffer([]byte("BT\n"))       // "Begin Text".

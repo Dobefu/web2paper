@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"time"
+
+	"github.com/Dobefu/web2paper/internal/html_parser"
 )
 
 var (
@@ -34,11 +36,10 @@ type Converter interface {
 type converter struct {
 	Converter
 
-	title  string
-	author string
-	pages  []Page
-	// TODO: Create a virtual DOM instead of a single string slice.
-	textContent []string
+	title       string
+	author      string
+	pages       []Page
+	elementData []html_parser.ElementData
 
 	inputData  []byte
 	outputData bytes.Buffer

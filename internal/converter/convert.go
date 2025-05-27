@@ -42,16 +42,16 @@ func (c *converter) Convert() (err error) {
 
 		content := []byte{}
 
-		for _, text := range c.textContent {
+		for _, element := range c.elementData {
 			textOptions := textOptionsNew()
-			textOptions.Halign = alignCenter
-			textOptions.Valign = alignCenter
+			textOptions.Halign = element.Halign
+			textOptions.Valign = element.Valign
 
 			content = append(content, c.formatTextObj(
-				24,
-				PdfSizeA4.Width/2,
-				PdfSizeA4.Height/2,
-				text,
+				element.FontSize,
+				element.X,
+				element.Y,
+				element.Content,
 				textOptions,
 			)...)
 		}
