@@ -5,6 +5,6 @@ import (
 )
 
 func (c *converter) addXrefOffset() {
-	c.outputData.WriteString("startxref\n")
-	c.outputData.WriteString(fmt.Sprintf("%d\n", c.xrefOffset))
+	fmt.Fprintf(c.outputData, "startxref\n")
+	fmt.Fprintf(c.outputData, "%d\n", c.xrefOffset)
 }

@@ -42,7 +42,7 @@ type converter struct {
 	elementData []html_parser.ElementData
 
 	inputData  []byte
-	outputData bytes.Buffer
+	outputData *bytes.Buffer
 	outputPath string
 
 	objs         []Obj
@@ -63,7 +63,7 @@ func New(input string, output string) (c Converter, err error) {
 		pages:  []Page{},
 
 		inputData:  data,
-		outputData: bytes.Buffer{},
+		outputData: &bytes.Buffer{},
 		outputPath: output,
 
 		objs:         []Obj{},
@@ -71,7 +71,7 @@ func New(input string, output string) (c Converter, err error) {
 		creationDate: time.Time{},
 	}
 
-	conv.outputData.WriteString(fmt.Sprintf("%%PDF-%s\n", version))
+	fmt.Fprintf(conv.outputData, "%%PDF-%s\n", version)
 
 	return conv, nil
 }

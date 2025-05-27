@@ -15,10 +15,10 @@ func (c *converter) addTrailer() {
 	revisionId := fmt.Sprintf("%x", hasher.Sum(nil))[:16]
 	hasher.Reset()
 
-	c.outputData.WriteString("trailer")
-	c.outputData.WriteString("<</Root 1 0 R")
-	c.outputData.WriteString(fmt.Sprintf("/Size %d", (len(c.objs) + 1)))
-	c.outputData.WriteString(fmt.Sprintf("/Info %d 0 R", (len(c.objs))))
-	c.outputData.WriteString(fmt.Sprintf("/ID[(%s)(%s)]", pdfId, revisionId))
-	c.outputData.WriteString(">>\n")
+	fmt.Fprintf(c.outputData, "trailer")
+	fmt.Fprintf(c.outputData, "<</Root 1 0 R")
+	fmt.Fprintf(c.outputData, "/Size %d", (len(c.objs) + 1))
+	fmt.Fprintf(c.outputData, "/Info %d 0 R", (len(c.objs)))
+	fmt.Fprintf(c.outputData, "/ID[(%s)(%s)]", pdfId, revisionId)
+	fmt.Fprintf(c.outputData, ">>\n")
 }
