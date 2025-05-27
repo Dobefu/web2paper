@@ -39,3 +39,13 @@ func TestAddMetadata(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkAddMetadata(b *testing.B) {
+	for b.Loop() {
+		b.StopTimer()
+		c, _ := New("testdata/001_empty_page/index.html", "/dev/null")
+		b.StartTimer()
+
+		c.addMetadata()
+	}
+}
