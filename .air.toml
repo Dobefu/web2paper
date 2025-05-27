@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
   args_bin = ["-l 0", "convert", "-i internal/converter/testdata/002_text_page/index.html", "-o tmp/out.pdf"]
   bin = "./web2paper"
-  cmd = "go build -buildvcs=false"
+  cmd = "go build -buildvcs=false -ldflags='-s -w'"
   delay = 100
   exclude_dir = [
     "assets",

@@ -49,3 +49,12 @@ func TestConvert(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkConvert(b *testing.B) {
+	for b.Loop() {
+		c, _ := New("testdata/001_empty_page/index.html", "/dev/null")
+
+		c.AddPage(PdfSize(PdfSizeA4))
+		_ = c.Convert()
+	}
+}
