@@ -35,3 +35,12 @@ func TestGetTextWidth(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkGetTextWidth(b *testing.B) {
+	f := Helvetica
+	b.ResetTimer()
+
+	for b.Loop() {
+		_ = f.GetTextWidth("Test string", 16)
+	}
+}
