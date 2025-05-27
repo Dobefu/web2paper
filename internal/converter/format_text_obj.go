@@ -57,19 +57,22 @@ func (c *converter) formatTextObj(
 	fm := fontmap.Helvetica
 
 	if options.Halign == html_parser.AlignCenter {
-		x = x - (fm.GetTextWidth(text, fontSize) / 2)
+		x -= (fm.GetTextWidth(text, fontSize) / 2)
 	}
 
 	if options.Halign == html_parser.AlignEnd {
-		x = x - fm.GetTextWidth(text, fontSize)
+		x -= fm.GetTextWidth(text, fontSize)
 	}
 
+	fontHeight := float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000
+	y -= fontHeight
+
 	if options.Valign == html_parser.AlignCenter {
-		y -= (float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000) / 2
+		y += fontHeight / 2
 	}
 
 	if options.Valign == html_parser.AlignEnd {
-		y -= float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000
+		y += fontHeight
 	}
 
 	buf := bytes.NewBuffer([]byte("BT\n"))       // "Begin Text".

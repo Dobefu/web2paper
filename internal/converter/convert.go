@@ -30,7 +30,11 @@ func (c *converter) Convert() (err error) {
 		fmt.Sprintf("/Count %d", len(c.pages)),
 	}, nil)
 
+	var currentPage *Page
+
 	for _, page := range c.pages {
+		currentPage = &page
+
 		c.addObj([]string{
 			"/Type",
 			"/Page",
@@ -50,7 +54,7 @@ func (c *converter) Convert() (err error) {
 			content = append(content, c.formatTextObj(
 				element.FontSize,
 				element.X,
-				element.Y,
+				element.Y+currentPage.Size.Height,
 				element.Content,
 				textOptions,
 			)...)
