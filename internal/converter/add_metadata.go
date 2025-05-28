@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-	"strings"
 )
 
 const (
-	producer = "Web2Paper (https://github.com/Dobefu/web2paper)"
+	producer     = "Web2Paper (https://github.com/Dobefu/web2paper)"
+	xpacketBegin = "<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>"
+	xpacketEnd   = "<?xpacket end=\"w\"?>"
 )
 
 type metadata struct {
@@ -86,11 +87,11 @@ func (c *converter) addMetadata() {
 	)
 
 	metadataXml := &bytes.Buffer{}
-	metadataXml.Grow((len(xml.Header) - 1) + 53 + len(marshalledXml) + 19)
-	metadataXml.WriteString(strings.TrimRight(xml.Header, "\n"))
-	metadataXml.WriteString("<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>")
+	metadataXml.Grow((len(xml.Header) - 1) + len(xpacketBegin) + len(marshalledXml) + len(xpacketEnd))
+	metadataXml.WriteString(xml.Header[:(len(xml.Header) - 1)])
+	metadataXml.WriteString(xpacketBegin)
 	metadataXml.Write(marshalledXml)
-	metadataXml.WriteString("<?xpacket end=\"w\"?>")
+	metadataXml.WriteString(xpacketEnd)
 
 	c.addObj(
 		[]string{
