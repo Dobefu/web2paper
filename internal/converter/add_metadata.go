@@ -7,6 +7,10 @@ import (
 	"strings"
 )
 
+const (
+	producer = "Web2Paper (https://github.com/Dobefu/web2paper)"
+)
+
 type metadata struct {
 	XMLName   xml.Name `xml:"x:xmpmeta"`
 	Namespace string   `xml:"xmlns:x,attr"`
@@ -45,8 +49,6 @@ type metadataTitleLi struct {
 }
 
 func (c *converter) addMetadata() {
-	producer := "Web2Paper (https://github.com/Dobefu/web2paper)"
-
 	marshalledXml, _ := xml.Marshal(
 		metadata{
 			Namespace: "adobe:ns:meta/",
@@ -83,7 +85,9 @@ func (c *converter) addMetadata() {
 		},
 	)
 
-	metadataXml := bytes.NewBuffer([]byte(strings.TrimRight(xml.Header, "\n")))
+	metadataXml := &bytes.Buffer{}
+	metadataXml.Grow((len(xml.Header) - 1) + 53 + len(marshalledXml) + 19)
+	metadataXml.WriteString(strings.TrimRight(xml.Header, "\n"))
 	metadataXml.WriteString("<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>")
 	metadataXml.Write(marshalledXml)
 	metadataXml.WriteString("<?xpacket end=\"w\"?>")

@@ -27,7 +27,7 @@ func (c *converter) addObj(data []string, stream []byte) {
 
 	c.objs = append(c.objs, Obj{
 		buf:    *obj,
-		offset: len(c.outputData.Bytes()),
+		offset: c.outputData.Len(),
 	})
 
 	c.outputData.Write(obj.Bytes())
