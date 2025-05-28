@@ -37,3 +37,14 @@ func TestParseHtml(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkParseHtml(b *testing.B) {
+	data, _ := os.ReadFile("../converter/testdata/002_text_page/index.html")
+
+	p := HtmlParser{}
+	b.ResetTimer()
+
+	for b.Loop() {
+		_ = p.ParseHtml(data)
+	}
+}
