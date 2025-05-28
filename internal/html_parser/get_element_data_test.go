@@ -36,3 +36,15 @@ func TestGetElementData(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkGetElementData(b *testing.B) {
+	data, _ := os.ReadFile("../converter/testdata/002_text_page/index.html")
+
+	p := HtmlParser{}
+	_ = p.ParseHtml(data)
+	b.ResetTimer()
+
+	for b.Loop() {
+		p.GetElementData([]float32{768})
+	}
+}
