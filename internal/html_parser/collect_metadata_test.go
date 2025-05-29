@@ -10,7 +10,6 @@ func BenchmarkCollectMetadata(b *testing.B) {
 
 	p := HtmlParser{}
 	_ = p.ParseHtml(data)
-	b.ResetTimer()
 
 	for b.Loop() {
 		p.collectMetadata()
