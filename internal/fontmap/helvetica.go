@@ -1,6 +1,6 @@
 package fontmap
 
-var Helvetica = fontmap{
+var Helvetica = Fontmap{
 	Ascent:    931,
 	Descent:   -225,
 	CapHeight: 718,

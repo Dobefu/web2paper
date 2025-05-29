@@ -55,6 +55,8 @@ func (c *converter) Convert() (err error) {
 				element.FontSize,
 				element.X,
 				element.Y+currentPage.Size.Height,
+				element.Width,
+				element.Height,
 				element.Content,
 				textOptions,
 			)...)

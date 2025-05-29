@@ -1,6 +1,6 @@
 package fontmap
 
-func (f *fontmap) GetTextWidth(text string, fontSize int) (width float32) {
+func (f *Fontmap) GetTextWidth(text string, fontSize int) (width float32) {
 	for _, glyph := range text {
 		glyphWidth, ok := f.CharWidths[glyph]
 

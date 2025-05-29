@@ -109,7 +109,7 @@ func TestFormatTextObj(t *testing.T) {
 				test.init(&textOptions)
 			}
 
-			textObj := c.formatTextObj(24, 0, 0, test.text, textOptions)
+			textObj := c.formatTextObj(24, 0, 0, 10, 10, test.text, textOptions)
 			assert.Contains(t, string(textObj), "BT")
 			assert.Contains(t, string(textObj), test.text)
 			assert.Contains(t, string(textObj), test.shouldContain)
@@ -125,6 +125,6 @@ func BenchmarkFormatTextObj(b *testing.B) {
 	b.ResetTimer()
 
 	for b.Loop() {
-		_ = c.formatTextObj(24, 0, 0, "Test text", textOptions)
+		_ = c.formatTextObj(24, 0, 0, 10, 10, "Test text", textOptions)
 	}
 }

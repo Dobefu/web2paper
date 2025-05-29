@@ -1,6 +1,6 @@
 package fontmap
 
-type fontmap struct {
+type Fontmap struct {
 	Ascent     int
 	Descent    int
 	CapHeight  int

@@ -22,6 +22,7 @@ const (
 )
 
 type _textOptions struct {
+	Font          fontmap.Fontmap
 	Spacing       int
 	WordSpacing   int
 	Scale         int
@@ -34,6 +35,7 @@ type _textOptions struct {
 
 func textOptionsNew() _textOptions {
 	return _textOptions{
+		Font:          fontmap.Helvetica,
 		Spacing:       0,
 		WordSpacing:   0,
 		Scale:         100,
@@ -49,30 +51,29 @@ func (c *converter) formatTextObj(
 	fontSize int,
 	x float32,
 	y float32,
+	width float32,
+	height float32,
 	text string,
 	options _textOptions,
 ) (textObj []byte) {
 	textOptionsDefaults := textOptionsNew()
 
-	fm := fontmap.Helvetica
-
 	if options.Halign == html_parser.AlignCenter {
-		x -= (fm.GetTextWidth(text, fontSize) / 2)
+		x -= width / 2
 	}
 
 	if options.Halign == html_parser.AlignEnd {
-		x -= fm.GetTextWidth(text, fontSize)
+		x -= width
 	}
 
-	fontHeight := float32(fm.Ascent+fm.Descent) * float32(fontSize) / 1000
-	y -= fontHeight
+	y -= height
 
 	if options.Valign == html_parser.AlignCenter {
-		y += fontHeight / 2
+		y += height / 2
 	}
 
 	if options.Valign == html_parser.AlignEnd {
-		y += fontHeight
+		y += height
 	}
 
 	buf := &bytes.Buffer{}
