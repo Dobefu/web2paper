@@ -54,7 +54,7 @@ func (c *converter) Convert() (err error) {
 			content = append(content, c.formatTextObj(
 				element.FontSize,
 				element.X,
-				element.Y+currentPage.Size.Height,
+				-element.Y+currentPage.Size.Height,
 				element.Width,
 				element.Height,
 				element.Content,

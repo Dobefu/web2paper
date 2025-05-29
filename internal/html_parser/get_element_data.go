@@ -27,10 +27,14 @@ func (p *HtmlParser) GetElementData(pageWidths []float32) (elementData []Element
 			el.FontSize = 24
 		case "p":
 			el.Content = descendant.Data
+		default:
+			continue
 		}
 
 		el.Width = el.Font.GetTextWidth(string(el.Content), el.FontSize)
 		el.Height = float32(el.Font.Ascent+el.Font.Descent) * float32(el.FontSize) / 1000
+
+		positionElement(elementData, pageWidths[0], &el)
 
 		if el.Content != "" {
 			elementData = append(elementData, el)
@@ -38,4 +42,23 @@ func (p *HtmlParser) GetElementData(pageWidths []float32) (elementData []Element
 	}
 
 	return elementData
+}
+
+func positionElement(elementData []ElementData, pageWidth float32, node *ElementData) {
+	if len(elementData) > 0 {
+		node.X = elementData[len(elementData)-1].X
+		node.Y = elementData[len(elementData)-1].Y
+	}
+
+	for _, element := range elementData {
+		if node.X >= element.X && node.X < element.X+element.Width &&
+			node.Y >= element.Y && node.Y < element.Y+element.Height {
+			node.X += element.Width
+		}
+
+		if node.X+node.Width > pageWidth {
+			node.X = 0
+			node.Y += node.Height
+		}
+	}
 }
