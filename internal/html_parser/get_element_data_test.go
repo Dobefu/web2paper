@@ -16,7 +16,7 @@ func TestGetElementData(t *testing.T) {
 	}{
 		"text page": {
 			input:      "../converter/testdata/002_text_page/index.html",
-			pageWidths: []float32{768},
+			pageWidths: []float32{100},
 		},
 	}
 
